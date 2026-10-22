@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GlowSkin - Skincare Store</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #fffafd; color: #33263b; }
+    header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 20px 8%; background: white; position: sticky; top: 0;
+      box-shadow: 0 2px 12px #eadce8; z-index: 10;
+    }
+    .logo { font-size: 25px; font-weight: bold; color: #d65b9b; }
+    nav a { text-decoration: none; margin: 0 10px; color: #5a4658; }
+    button {
+      border: 0; border-radius: 25px; padding: 12px 20px;
+      background: #dc6aa7; color: white; cursor: pointer;
+    }
+    button:hover { background: #b94883; }
+    .hero {
+      padding: 85px 8%; min-height: 400px;
+      background: linear-gradient(120deg,#ffe4f0,#f1e6ff);
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 25px;
+    }
+    .hero h1 { font-size: clamp(32px,5vw,52px); margin-bottom: 20px; }
+    .hero p { line-height: 1.8; max-width: 450px; margin-bottom: 24px; }
+    .hero img { width: 42%; border-radius: 30px; object-fit: cover; }
+    section { padding: 60px 8%; }
+    .heading { text-align: center; margin-bottom: 30px; }
+    .heading p { margin-top: 10px; color: #89798b; }
+    .search { display: block; margin: 0 auto 30px; padding: 13px;
+      width: min(100%,400px); border: 1px solid #ead5e5; border-radius: 25px; }
+    .products { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
+    .card { background: white; border-radius: 18px; overflow: hidden;
+      box-shadow: 0 5px 20px #eedde9; padding-bottom: 18px; }
+    .card img { width: 100%; height: 180px; object-fit: cover; background: #f8edf6; }
+    .card h3,.card p,.card .price,.card button { margin: 12px 15px 0; }
+    .card p { color: #8b7889; font-size: 14px; line-height: 1.5; }
+    .price { color: #d65b9b; font-weight: bold; }
+    .about { background: #f8eafa; text-align: center; line-height: 1.9; }
+    .about p { max-width: 650px; margin: 15px auto; }
+    .newsletter { text-align: center; background: #fce5f0; }
+    .newsletter input { padding: 13px; border: 1px solid #e8c5db;
+      border-radius: 20px; margin: 15px 5px; max-width: 100%; }
+    footer { background: #392b42; color: white; padding: 30px 8%; text-align: center; }
+    #cart { position: fixed; right: 20px; bottom: 20px; z-index: 20;
+      box-shadow: 0 4px 15px #d6a0c4; }
+    @media(max-width:850px) {
+      .products { grid-template-columns: repeat(2,1fr); }
+      .hero { flex-direction: column; align-items: flex-start; }
+      .hero img { width: 100%; max-height: 280px; }
+      nav { display: none; }
+    }
+    @media(max-width:420px) {
+      .products { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">✿ GlowSkin</div>
+    <nav>
+      <a href="#home">Beranda</a>
+      <a href="#produk">Produk</a>
+      <a href="#tentang">Tentang Kami</a>
+      <a href="#kontak">Kontak</a>
+    </nav>
+    <button onclick="lihatKeranjang()">🛒 <span id="jumlah">0</span></button>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div>
+        <p>✨ SKINCARE UNTUK KULIT SEHAT</p>
+        <h1>Rawat Kulitmu,<br> Pancarkan Glow-mu!</h1>
+        <p>Temukan rangkaian perawatan kulit untuk menemani rutinitasmu.
+          Mulai perjalanan kulit sehat bersama GlowSkin.</p>
+        <button onclick="document.querySelector('#produk').scrollIntoView({behavior:'smooth'})">
+          Belanja Sekarang →
+        </button>
+      </div>
+      <img src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=800&q=80" alt="Produk skincare">
+    </section>
+
+    <section id="produk">
+      <div class="heading">
+        <h2>♡ Produk Pilihan</h2>
+        <p>Temukan teman terbaik untuk rutinitas skincare-mu.</p>
+      </div>
+      <input class="search" id="cari" placeholder="🔎 Cari produk skincare..." oninput="cariProduk()">
+      <div class="products" id="daftar"></div>
+    </section>
+
+    <section class="about" id="tentang">
+      <h2>Tentang GlowSkin 🌷</h2>
+      <p>Kami percaya perawatan kulit adalah bentuk perhatian kepada diri sendiri.
+        Temukan produk yang sesuai kebutuhan kulit dan gunakan secara konsisten.
+        Setiap kulit unik, jadi pilih perawatan dengan cermat.</p>
+    </section>
+
+    <section class="newsletter" id="kontak">
+      <h2>✨ Dapatkan Info Terbaru</h2>
+      <p>Berlangganan untuk mendapatkan berita produk dan promo terbaru.</p>
+      <form onsubmit="langganan(event)">
+        <input id="email" type="email" placeholder="Masukkan email kamu" required>
+        <button type="submit">Berlangganan</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <h3>✿ GlowSkin</h3>
+    <p>Rawat diri, cintai kulitmu.</p>
+    <p>© 2026 GlowSkin. Demo toko skincare.</p>
+  </footer>
+
+  <button id="cart" onclick="lihatKeranjang()">🛍 Keranjang (<span id="jumlah2">0</span>)</button>
+
+  <script>
+    const produk = [
+      {nama:"Facial Wash", harga:89000, deskripsi:"Membersihkan wajah dengan lembut.", gambar:"photo-1556229010-6c3f2c9ca5f8"},
+      {nama:"Hydrating Toner", harga:99000, deskripsi:"Membantu menjaga kelembapan kulit.", gambar:"photo-1608248543803-ba4f8c70ae0b"},
+      {nama:"Glow Serum", harga:149000, deskripsi:"Perawatan tambahan untuk kulitmu.", gambar:"photo-1601049541289-9b1b7bbbfe19"},
+      {nama:"Daily Moisturizer", harga:129000, deskripsi:"Membantu menjaga kulit tetap lembap.", gambar:"photo-1556228720-195a672e8a03"}
+    ];
+
+    let keranjang = [];
+
+    function rupiah(angka) {
+      return "Rp " + angka.toLocaleString("id-ID");
+    }
+
+    function tampilkan(data) {
+      document.getElementById("daftar").innerHTML = data.length
+        ? data.map(p => `
+          <article class="card">
+            <img src="https://images.unsplash.com/${p.gambar}?auto=format&fit=crop&w=500&q=80"
+              alt="${p.nama}" loading="lazy">
+            <h3>${p.nama}</h3>
+            <p>${p.deskripsi}</p>
+            <div class="price">${rupiah(p.harga)}</div>
+            <button onclick="tambah('${p.nama}')">+ Keranjang</button>
+          </article>
+        `).join("")
+        : "<p>Produk tidak ditemukan.</p>";
+    }
+
+    function cariProduk() {
+      const kata = document.getElementById("cari").value.toLowerCase();
+      tampilkan(produk.filter(p =>
+        p.nama.toLowerCase().includes(kata) ||
+        p.deskripsi.toLowerCase().includes(kata)
+      ));
+    }
+
+    function tambah(nama) {
+      const item = keranjang.find(p => p.nama === nama);
+      if (item) item.jumlah++;
+      else keranjang.push({...produk.find(p => p.nama === nama), jumlah:1});
+      perbaruiKeranjang();
+      alert(nama + " ditambahkan ke keranjang!");
+    }
+
+    function perbaruiKeranjang() {
+      const jumlah = keranjang.reduce((total,p) => total + p.jumlah, 0);
+      document.getElementById("jumlah").textContent = jumlah;
+      document.getElementById("jumlah2").textContent = jumlah;
+    }
+
+    function lihatKeranjang() {
+      if (!keranjang.length) {
+        alert("Keranjang kamu masih kosong.");
+        return;
+      }
+      const isi = keranjang.map(p =>
+        `${p.nama} x${p.jumlah} — ${rupiah(p.harga*p.jumlah)}`
+      ).join("\n");
+      const total = keranjang.reduce((sum,p) => sum+p.harga*p.jumlah,0);
+      alert("KERANJANG BELANJA\n\n" + isi +
+        "\n\nTotal: " + rupiah(total) +
+        "\n\nIni demo, pembayaran belum tersedia.");
+    }
+
+    function langganan(event) {
+      event.preventDefault();
+      alert("Terima kasih! Form demo berhasil diisi.");
+      document.getElementById("email").value = "";
+    }
+
+    tampilkan(produk);
+  </script>
+</body>
+</html>
